@@ -28,7 +28,7 @@
  */
 
 /** Pixel ID from the environment. Empty string means "tracking disabled". */
-export const META_PIXEL_ID: string = import.meta.env.VITE_META_PIXEL_ID ?? "";
+export const META_PIXEL_ID: string = import.meta.env["VITE_META_PIXEL_ID"] ?? "";
 
 /** localStorage keys (namespaced so they never clash with the cart). */
 const CONSENT_KEY = "pureharvest_cookie_consent";
