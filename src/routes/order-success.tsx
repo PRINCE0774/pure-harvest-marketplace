@@ -7,7 +7,7 @@ import type { DemoOrder } from "./checkout";
 
 export const Route = createFileRoute("/order-success")({
   validateSearch: (search: Record<string, unknown>) => ({
-    id: typeof search.id === "string" ? search.id : undefined,
+    id: typeof search["id"] === "string" ? search["id"] : undefined,
   }),
   head: () => ({
     meta: [
