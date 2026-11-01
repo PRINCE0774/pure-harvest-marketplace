@@ -39,6 +39,10 @@ export function CookieConsent() {
       // Consent given → start tracking now.
       initPixel();
       trackPageView();
+    } else {
+      // Consent withdrawn → tell Meta's pixel to stop sending, in case it
+      // was already initialised during an earlier visit.
+      revokePixelConsent();
     }
   };
 
