@@ -27,8 +27,10 @@
  *    ("INR") so Meta can report and optimise on them.
  */
 
-/** Pixel ID from the environment. Empty string means "tracking disabled". */
-export const META_PIXEL_ID: string = import.meta.env["VITE_META_PIXEL_ID"] ?? "";
+/** Pixel ID from the environment, falling back to the Pure Harvest pixel.
+ *  (A pixel ID is not a secret — Meta itself exposes it in the page source.) */
+export const META_PIXEL_ID: string =
+  import.meta.env["VITE_META_PIXEL_ID"] ?? "1273153281659661";
 
 /** localStorage keys (namespaced so they never clash with the cart). */
 const CONSENT_KEY = "pureharvest_cookie_consent";
@@ -108,7 +110,21 @@ export function initPixel(): void {
 
   // agent identifies this integration; empty user data (no advanced matching).
   fbq("init", META_PIXEL_ID, {}, { agent: "lovable" });
+  // Meta's regional consent filter (EU/UK visitors) holds every event until
+  // the site explicitly tells the pixel consent was granted. We only ever
+  // initialise after the banner is accepted, so grant right away.
+  fbq("consent", "grant");
   console.info(`[Pure Harvest demo] Meta Pixel initialised (id ${META_PIXEL_ID}).`);
+}
+
+/**
+ * Tell Meta's pixel consent was withdrawn. Used when a visitor who accepted
+ * earlier changes their answer to "Reject" from the banner. The pixel keeps
+ * loading (it is already in the page) but stops sending anything.
+ */
+export function revokePixelConsent(): void {
+  if (typeof window === "undefined" || !window.fbq) return;
+  window.fbq("consent", "revoke");
 }
 
 /* -------------------------------------------------------------------------
