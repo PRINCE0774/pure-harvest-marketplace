@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import {
   getStoredConsent,
   initPixel,
+  revokePixelConsent,
   saveConsent,
   trackPageView,
   type ConsentChoice,
